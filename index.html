@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>JavaScript Drum-kit</title>
+</head>
+<body>
+    <div class="keys">
+        <div data-key="65" class="key">
+            <kbd>A</kbd>
+            <p>clap</p>
+        </div>
+        <div data-key="83" class="key">
+            <kbd>S</kbd>
+            <p>closed-hat</p>
+        </div>
+        <div data-key="68" class="key">
+            <kbd>D</kbd>
+            <p>kick</p>
+        </div>
+        <div data-key="70" class="key">
+            <kbd>F</kbd>
+            <p>open-hat</p>
+        </div>
+        <div data-key="71" class="key">
+            <kbd>G</kbd>
+            <p>drop</p>
+        </div>
+        <div data-key="72" class="key">
+            <kbd>H</kbd>
+            <p>cymbal</p>
+        </div>
+        <div data-key="74" class="key">
+            <kbd>J</kbd>
+            <p>snare</p>
+        </div>
+        <div data-key="75" class="key">
+            <kbd>K</kbd>
+            <p>tom</p>
+        </div>
+        <div data-key="76" class="key">
+            <kbd>L</kbd>
+            <p>YO</p>
+        </div>
+    </div>
+
+<audio data-key="65" src="./sounds/Clap.wav"></audio>
+<audio data-key="83" src="./sounds/Closed Hat.wav"></audio>
+<audio data-key="68" src="./sounds/Kick.wav"></audio>
+<audio data-key="70" src="./sounds/Open Hat.wav"></audio>
+<audio data-key="71" src="./sounds/Drop.wav"></audio>
+<audio data-key="72" src="./sounds/Cymbal.wav"></audio>
+<audio data-key="74" src="./sounds/Snare.wav"></audio>
+<audio data-key="75" src="./sounds/Tom 1.wav"></audio>
+<audio data-key="76" src="./sounds/Yo.wav"></audio>
+
+<script>
+    // Listens for an event that happens in the window, specifically when someone presses a "key down" on the keyboard. Passes that event down into the function as e.
+    // querySelector returns the first Element within the document that matches the specified selector, or group of selectors. If no matches are found, null is returned.
+    
+
+    function playSound(e){
+        const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`)
+        const key = document.querySelector(`.key[data-key="${e.keyCode}"]`)
+        console.log(audio);
+        console.log(key);
+        if(!audio) return; //stops the function from running altogether
+        audio.currentTime = 0; //restarts the audio that's playing, so if we press the same key multiple times it will keep playing again and again.
+        audio.play();
+        key.classList.add('playing'); //allows us to trigger the playing class selector by adding playing as a class to our keys
+    }
+
+    function removeTransition(e) {
+        if(e.propertyName !== 'transform') return; //skip it if it's not a transform
+        this.classList.remove('playing');
+    }
+
+    const keys = document.querySelectorAll('.key');
+    keys.forEach(key => key.addEventListener('transitionend', removeTransition));
+    window.addEventListener('keydown', playSound);
+</script>
+</body>
+</html>
